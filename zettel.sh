@@ -9,7 +9,11 @@ for tool in "${required[@]}"; do
 done
 #-------------------------------------------------------------------------------
 
-# Creating a new note
+# Creating a new note. Use current timestampt as prefix and markdown
+# extension '.md' as extension. The note title will be inserted to the
+# newly created file as markdown heading 1 '# Title'. File will be
+# opened in your editor of choice, defined via $EDITOR environment
+# variable.
 create() {
   # Create new timestamp for note
   local timestamp=$(date +"%Y-%m-%d-%H%M")
