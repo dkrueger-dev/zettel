@@ -9,6 +9,28 @@ for tool in "${required[@]}"; do
 done
 #-------------------------------------------------------------------------------
 
+# Function for asking user a yes-or-no question.
+# Usage: ask_user $message
+ask_user() {
+    # read user input
+    read -p "$1 [yes/no]: " answer
+
+    # disable case matching
+    shopt -s nocasematch
+    while [[ ! $answer =~ (y|yes) ]] && [[ ! $answer =~ (n|no) ]]; do
+        echo "Please answer with 'yes' or 'no'..."
+
+        # read user input
+        read -p "$1 [yes/no]: " answer
+    done
+
+    if [[ $answer =~ (y|yes) ]]; then
+        return 0 # return true
+    else
+        return 1 # return false
+    fi
+}
+
 # Creating a new note. Use current timestamp as prefix and markdown
 # extension '.md' as extension. The note title will be inserted to the
 # newly created file as markdown heading 1 '# Title'. File will be
