@@ -80,7 +80,8 @@ if [[ -z ${COMMAND} ]]; then
   exit 1
 fi
 
-if [[ ${COMMAND} == "new" ]]; then
+if [[ ${COMMAND} == "create" ]]; then
+  # Call create function
   create
   exit 0
 fi
