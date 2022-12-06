@@ -37,8 +37,8 @@ ask_user() {
 # opened in your editor of choice, defined via $EDITOR environment
 # variable.
 create() {
-  # Create new timestamp for note
-  local timestamp=$(date +"%Y-%m-%d-%H%M")
+    # Create new timestamp for note
+    local timestamp=$(date +"%Y-%m-%d-%H%M")
 
   # Read note title from input
   read -p "Note title: " -r title
@@ -50,10 +50,10 @@ create() {
   local filepath="$home_dir/$filename" 
   touch "$filepath"
   if [[ -f "$filepath" ]]; then
-    echo "File \"$filepath\" created."
+      echo "File \"$filepath\" created."
   else
-    echo "Failed creating file."
-    exit 1
+      echo "Failed creating file."
+      exit 1
   fi
 
   # Write title to document
@@ -69,21 +69,21 @@ home_dir="${HOME}/Notizen"
 
 # Check if home_dir exists
 if [[ ! -d "$home_dir" ]]; then
-  echo "Directory \"$home_dir\" does not exist."
-  echo "Create it first."
-  exit 1
+    echo "Directory \"$home_dir\" does not exist."
+    echo "Create it first."
+    exit 1
 fi
 
 COMMAND=$1
 if [[ -z ${COMMAND} ]]; then
-  echo "No command specified."
-  exit 1
+    echo "No command specified."
+    exit 1
 fi
 
 if [[ ${COMMAND} == "create" ]]; then
-  # Call create function
-  create
-  exit 0
+    # Call create function
+    create
+    exit 0
 fi
 
 echo "Command \"${COMMAND}\" not found."
@@ -93,8 +93,8 @@ exit 1
 
 # Creating a new note
 create() {
-  # Create new timestamp for note
-  local timestamp=$(date +"%Y-%m-%d-%H%M")
+    # Create new timestamp for note
+    local timestamp=$(date +"%Y-%m-%d-%H%M")
 
   # Read note title from input
   read -p "Note title: " -r title
@@ -106,10 +106,10 @@ create() {
   local filepath="$home_dir/$filename" 
   touch "$filepath"
   if [[ -f "$filepath" ]]; then
-    echo "File \"$filepath\" created."
+      echo "File \"$filepath\" created."
   else
-    echo "Failed creating file."
-    exit 1
+      echo "Failed creating file."
+      exit 1
   fi
 
   # Write title to document
