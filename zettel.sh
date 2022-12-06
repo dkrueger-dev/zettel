@@ -40,27 +40,38 @@ create() {
     # Create new timestamp for note
     local timestamp=$(date +"%Y-%m-%d-%H%M")
 
-  # Read note title from input
-  read -p "Note title: " -r title
+    # Read note title from input
+    read -p "Note title: " -r title
 
-  # Create filename
-  local filename="$timestamp $title.md" 
+    # Create filename
+    local filename="$timestamp $title.md" 
 
-  # Create file and check if it is created
-  local filepath="$home_dir/$filename" 
-  touch "$filepath"
-  if [[ -f "$filepath" ]]; then
-      echo "File \"$filepath\" created."
-  else
-      echo "Failed creating file."
-      exit 1
-  fi
+    # Create file and check if it is created
+    local filepath="$home_dir/$filename" 
+    touch "$filepath"
+    if [[ -f "$filepath" ]]; then
+        echo "File \"$filepath\" created."
+    else
+        echo "Failed creating file."
+        exit 1
+    fi
+  
+    # Write title to document
+    echo "# $title" > "$filepath" 
+  
+    # Open file in editor
+    ${EDITOR} "$filepath" 
+}
 
-  # Write title to document
-  echo "# $title" > "$filepath" 
+# Open an existing note. For finding the note to open, the function will
+# change into home directory and call fzf. The note will be opened in
+# editor of choice, defined via $EDITOR environment variable.
+open() { 
+    # Change into home directory
+    cd "$home_dir"
 
-  # Open file in editor
-  ${EDITOR} "$filepath" 
+    # Call editor with file selected via fzf
+    ${EDITOR} "$(fzf)" 
 }
 
 #-------------------------------------------------------------------------------
@@ -84,37 +95,12 @@ if [[ ${COMMAND} == "create" ]]; then
     # Call create function
     create
     exit 0
+elif [[ ${COMMAND} == "open" ]]; then
+    # Call open function
+    open
+    exit 0
 fi
 
 echo "Command \"${COMMAND}\" not found."
 exit 1
 
-#-------------------------------------------------------------------------------
-
-# Creating a new note
-create() {
-    # Create new timestamp for note
-    local timestamp=$(date +"%Y-%m-%d-%H%M")
-
-  # Read note title from input
-  read -p "Note title: " -r title
-
-  # Create filename
-  local filename="$timestamp $title.md" 
-
-  # Create file and check if it is created
-  local filepath="$home_dir/$filename" 
-  touch "$filepath"
-  if [[ -f "$filepath" ]]; then
-      echo "File \"$filepath\" created."
-  else
-      echo "Failed creating file."
-      exit 1
-  fi
-
-  # Write title to document
-  echo "# $title" > "$filepath" 
-
-  # Open file in editor
-  ${EDITOR} "$filepath" 
-}
