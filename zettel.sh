@@ -81,7 +81,7 @@ open() {
 
 #-------------------------------------------------------------------------------
 
-home_dir="${HOME}/Notizen"
+home_dir="${ZETTEL_DIR}"
 
 # Check if home_dir exists
 if [[ ! -d "$home_dir" ]]; then
