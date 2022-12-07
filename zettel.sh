@@ -1,7 +1,7 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
 # define required tools for the script
-required=()
+required=(fzf)
 
 # check if required tools are installed
 for tool in "${required[@]}"; do
