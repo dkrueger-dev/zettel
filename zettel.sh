@@ -1,7 +1,7 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
 # define required tools for the script
-required=(fzf)
+required=(fzf rg)
 
 # check if required tools are installed
 for tool in "${required[@]}"; do
@@ -79,6 +79,22 @@ open() {
     fi 
 }
 
+# The find function searches within file contents and file names. The
+# search powered by ripgrep piped to fzf. The corresponding file will be
+# opened in editor.
+find() { 
+    # Change into home directory
+    cd "$home_dir"
+
+    # Run rg and fzf to get filename
+    file="$(rg --line-number --column . | fzf)" 
+    
+    # Call editor with file selected
+    if [[ ! -z "$file" ]]; then
+        ${EDITOR} "$file" 
+    fi 
+}
+
 #-------------------------------------------------------------------------------
 
 home_dir="${ZETTEL_DIR}"
@@ -103,6 +119,10 @@ if [[ ${COMMAND} == "create" ]]; then
 elif [[ ${COMMAND} == "open" ]]; then
     # Call open function
     open
+    exit 0
+elif [[ ${COMMAND} == "find" ]]; then
+    # Call find function
+    find
     exit 0
 fi
 
