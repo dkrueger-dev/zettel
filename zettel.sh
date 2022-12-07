@@ -70,8 +70,13 @@ open() {
     # Change into home directory
     cd "$home_dir"
 
+    # Run fzf to get filename
+    file="$(fzf)" 
+    
     # Call editor with file selected via fzf
-    ${EDITOR} "$(fzf)" 
+    if [[ ! -z "$file" ]]; then
+        ${EDITOR} "$file" 
+    fi 
 }
 
 #-------------------------------------------------------------------------------
