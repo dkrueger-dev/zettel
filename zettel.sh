@@ -95,6 +95,21 @@ find() {
     fi 
 }
 
+# Via search function a file content search via ripgrep is done on all
+# notes in specified note home directory.
+# Usage: search $pattern
+search() {
+    local pattern=$1
+
+    # Check for pattern parameter
+    if [[ -z $pattern ]]; then
+        echo "No pattern specified."
+        exit 1
+    fi
+
+    rg --heading --line-number --column "$pattern" "$home_dir" 
+}
+
 #-------------------------------------------------------------------------------
 
 home_dir="${ZETTEL_DIR}"
@@ -123,6 +138,10 @@ elif [[ ${COMMAND} == "edit" ]]; then
 elif [[ ${COMMAND} == "find" ]]; then
     # Call find function
     find
+    exit 0
+elif [[ ${COMMAND} == "search" ]]; then
+    # Call search function with search pattern as argument
+    search "$2"
     exit 0
 fi
 
