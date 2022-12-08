@@ -63,10 +63,10 @@ create() {
     ${EDITOR} "$filepath" 
 }
 
-# Open an existing note. For finding the note to open, the function will
+# Edit an existing note. For finding the note to edit, the function will
 # change into home directory and call fzf. The note will be opened in
 # editor of choice, defined via $EDITOR environment variable.
-open() { 
+edit() { 
     # Change into home directory
     cd "$home_dir"
 
@@ -116,9 +116,9 @@ if [[ ${COMMAND} == "create" ]]; then
     # Call create function
     create
     exit 0
-elif [[ ${COMMAND} == "open" ]]; then
-    # Call open function
-    open
+elif [[ ${COMMAND} == "edit" ]]; then
+    # Call edit function
+    edit
     exit 0
 elif [[ ${COMMAND} == "find" ]]; then
     # Call find function
