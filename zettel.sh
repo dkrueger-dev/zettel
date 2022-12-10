@@ -110,6 +110,23 @@ search() {
     rg --heading --line-number --column "$pattern" "$home_dir" 
 }
 
+# The link command will create an markdown link from the selected file.
+# The first line of the file must contain the title.
+link_cmd() {
+    # Change into home directory
+    cd "$home_dir"
+
+    # Run fzf to get filename
+    file="$(fzf)"
+    
+    # Call editor with file selected via fzf
+    if [[ ! -z "$file" ]]; then
+        # Get the title from first line of file
+        local title=$(head -n 1 "$file" | tr -d "# ")
+        echo "[$title]($file)"
+    fi
+}
+
 #-------------------------------------------------------------------------------
 
 home_dir="${ZETTEL_DIR}"
@@ -142,6 +159,10 @@ elif [[ ${COMMAND} == "find" ]]; then
 elif [[ ${COMMAND} == "search" ]]; then
     # Call search function with search pattern as argument
     search "$2"
+    exit 0
+elif [[ ${COMMAND} == "link" ]]; then
+    # Call link function
+    link_cmd
     exit 0
 fi
 
