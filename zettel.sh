@@ -122,7 +122,7 @@ link_cmd() {
     # Call editor with file selected via fzf
     if [[ ! -z "$file" ]]; then
         # Get the title from first line of file
-        local title=$(head -n 1 "$file" | tr -d "# ")
+        local title=$(head -n 1 "$file" | sed 's/# //g')
         echo "[$title]($file)"
     fi
 }
