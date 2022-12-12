@@ -47,7 +47,7 @@ create() {
     local filename="$timestamp $title.md" 
 
     # Create file and check if it is created
-    local filepath="$home_dir/$filename" 
+    local filepath="$zettel_dir/$filename" 
     touch "$filepath"
     if [[ -f "$filepath" ]]; then
         echo "File \"$filepath\" created."
@@ -68,7 +68,7 @@ create() {
 # editor of choice, defined via $EDITOR environment variable.
 edit() { 
     # Change into home directory
-    cd "$home_dir"
+    cd "$zettel_dir"
 
     # Run fzf to get filename
     file="$(fzf)" 
@@ -84,7 +84,7 @@ edit() {
 # opened in editor.
 find() { 
     # Change into home directory
-    cd "$home_dir"
+    cd "$zettel_dir"
 
     # Run rg and fzf to get filename
     file="$(rg --line-number --column . | fzf)" 
@@ -107,14 +107,14 @@ search() {
         exit 1
     fi
 
-    rg --heading --line-number --column "$pattern" "$home_dir" 
+    rg --heading --line-number --column "$pattern" "$zettel_dir" 
 }
 
 # The link command will create an markdown link from the selected file.
 # The first line of the file must contain the title.
 link_cmd() {
     # Change into home directory
-    cd "$home_dir"
+    cd "$zettel_dir"
 
     # Run fzf to get filename
     file="$(fzf)"
@@ -129,11 +129,11 @@ link_cmd() {
 
 #-------------------------------------------------------------------------------
 
-home_dir="${ZETTEL_DIR}"
+zettel_dir="${ZETTEL_DIR}"
 
-# Check if home_dir exists
-if [[ ! -d "$home_dir" ]]; then
-    echo "Directory \"$home_dir\" does not exist."
+# Check if zettel_dir exists
+if [[ ! -d "$zettel_dir" ]]; then
+    echo "Directory \"$zettel_dir\" does not exist."
     echo "Create it first."
     exit 1
 fi
