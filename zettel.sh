@@ -36,7 +36,7 @@ ask_user() {
 # newly created file as markdown heading 1 '# Title'. File will be
 # opened in your editor of choice, defined via $EDITOR environment
 # variable.
-create() {
+create_cmd() {
     # Create new timestamp for note
     local timestamp=$(date +"%Y-%m-%d-%H%M")
 
@@ -66,7 +66,7 @@ create() {
 # Edit an existing note. For finding the note to edit, the function will
 # change into home directory and call fzf. The note will be opened in
 # editor of choice, defined via $EDITOR environment variable.
-edit() { 
+edit_cmd() { 
     # Change into home directory
     cd "$zettel_dir"
 
@@ -82,7 +82,7 @@ edit() {
 # The find function searches within file contents and file names. The
 # search powered by ripgrep piped to fzf. The corresponding file will be
 # opened in editor.
-find() { 
+find_cmd() { 
     # Change into home directory
     cd "$zettel_dir"
 
@@ -97,8 +97,8 @@ find() {
 
 # Via search function a file content search via ripgrep is done on all
 # notes in specified note home directory.
-# Usage: search $pattern
-search() {
+# Usage: search_cmd $pattern
+search_cmd() {
     local pattern=$1
 
     # Check for pattern parameter
@@ -146,19 +146,19 @@ fi
 
 if [[ ${COMMAND} == "create" ]]; then
     # Call create function
-    create
+    create_cmd
     exit 0
 elif [[ ${COMMAND} == "edit" ]]; then
     # Call edit function
-    edit
+    edit_cmd
     exit 0
 elif [[ ${COMMAND} == "find" ]]; then
     # Call find function
-    find
+    find_cmd
     exit 0
 elif [[ ${COMMAND} == "search" ]]; then
     # Call search function with search pattern as argument
-    search "$2"
+    search_cmd "$2"
     exit 0
 elif [[ ${COMMAND} == "link" ]]; then
     # Call link function
