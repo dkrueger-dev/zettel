@@ -127,6 +127,20 @@ link_cmd() {
     fi
 }
 
+# Tags function lists all used tags. The function can be used for
+# filtering notes by tag or for tags management.
+tags_cmd() {
+    # rg does content search with regex for tags and group by file
+    # sed remove all empty lines
+    # sort sorts all tags aplhabetically
+    # uniq remove doubled entries
+    rg --only-matching --no-filename --no-line-number -e "#[A-Za-z-]+" \
+        "$zettel_dir" \
+        | sed '/\n/d' \
+        | sort -n \
+        | uniq
+}
+
 #-------------------------------------------------------------------------------
 
 zettel_dir="${ZETTEL_DIR}"
@@ -163,6 +177,10 @@ elif [[ ${COMMAND} == "search" ]]; then
 elif [[ ${COMMAND} == "link" ]]; then
     # Call link function
     link_cmd
+    exit 0
+elif [[ ${COMMAND} == "tags" ]]; then
+    # Call tags function
+    tags_cmd
     exit 0
 fi
 
