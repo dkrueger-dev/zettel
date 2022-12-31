@@ -46,6 +46,28 @@ create_cmd() {
     # Create filename
     local filename="$timestamp $title.md" 
 
+    template_file=""
+    # Check for set template directory
+    if [[ ! -z "${zettel_template_dir}" ]]; then
+        # Check for existing directory
+        if [[ -d "${zettel_template_dir}" ]]; then
+            # Read filenames from directory
+            
+            # Set bash option to avoid unmatched patterns expand as
+            # result values
+            shopt -s nullglob
+            # Store matching file names into array
+            filearray=( "$zettel_template_dir"/* )
+            # Trim path prefixes
+            filearray=( "${filearray[@]##*/}" )
+
+            # Check for template files
+            if [[ ${#filearray[@]} != 0 ]]; then
+                template_file=$(echo "${filearray[@]}" | tr ' ' '\n' | fzf)
+            fi
+        fi
+    fi
+
     # Create file and check if it is created
     local filepath="$zettel_dir/$filename" 
     touch "$filepath"
@@ -58,7 +80,12 @@ create_cmd() {
   
     # Write title to document
     echo "# $title" > "$filepath" 
-  
+
+    # Check for selected template file
+    if [[ ! -z "${template_file}" ]]; then
+        cat "$zettel_template_dir"/"$template_file" >> "$filepath"
+    fi
+
     # Open file in editor
     ${EDITOR} "$filepath" 
 }
@@ -144,6 +171,7 @@ tags_cmd() {
 #-------------------------------------------------------------------------------
 
 zettel_dir="${ZETTEL_DIR}"
+zettel_template_dir="${ZETTEL_TEMPLATE_DIR}"
 
 # Check if zettel_dir exists
 if [[ ! -d "$zettel_dir" ]]; then
