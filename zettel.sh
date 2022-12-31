@@ -33,9 +33,11 @@ ask_user() {
 
 # Creating a new note. Use current timestamp as prefix and markdown
 # extension '.md' as extension. The note title will be inserted to the
-# newly created file as markdown heading 1 '# Title'. File will be
-# opened in your editor of choice, defined via $EDITOR environment
-# variable.
+# newly created file as markdown heading 1 '# Title'. Template selection
+# is supported if $ZETTEL_TEMPLATE_DIR environment variable is set to a
+# directory, containing template plain text files. Template content will
+# be inserted after the title of created note. File will be opened in
+# your editor of choice, defined via $EDITOR environment variable.
 create_cmd() {
     # Create new timestamp for note
     local timestamp=$(date +"%Y-%m-%d-%H%M")
