@@ -170,6 +170,8 @@ tags_cmd() {
         | uniq
 }
 
+# The git command will forward parameters to a git command which is
+# called within the zettel home directory.
 git_cmd() {
     # Change into zettel directory
     cd "$zettel_dir"
