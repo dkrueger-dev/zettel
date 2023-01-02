@@ -105,6 +105,12 @@ edit_cmd() {
     # Call editor with file selected via fzf
     if [[ ! -z "$file" ]]; then
         ${EDITOR} "$file" 
+
+        # Do git add/commit after edit
+        if ask_user "Run git add/commit?"; then
+            git add -p
+            git commit -m "Edit note"
+        fi
     fi 
 }
 
