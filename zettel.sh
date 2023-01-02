@@ -90,6 +90,13 @@ create_cmd() {
 
     # Open file in editor
     ${EDITOR} "$filepath" 
+
+    # Do git add/commit after edit
+    if ask_user "Run git add/commit?"; then
+        cd "$zettel_dir"
+        git add "$filename" 
+        git commit -m "Add note"
+    fi
 }
 
 # Edit an existing note. For finding the note to edit, the function will
