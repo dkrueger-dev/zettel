@@ -170,6 +170,14 @@ tags_cmd() {
         | uniq
 }
 
+git_cmd() {
+    # Change into zettel directory
+    cd "$zettel_dir"
+
+    # call git command with parameters
+    git $@
+}
+
 #-------------------------------------------------------------------------------
 
 zettel_dir="${ZETTEL_DIR}"
@@ -211,6 +219,11 @@ elif [[ ${COMMAND} == "link" ]]; then
 elif [[ ${COMMAND} == "tags" ]]; then
     # Call tags function
     tags_cmd
+    exit 0
+elif [[ ${COMMAND} == "git" ]]; then
+    # Call git_cmd function with all passed argument shifted by one 
+    shift 1
+    git_cmd $@
     exit 0
 fi
 
