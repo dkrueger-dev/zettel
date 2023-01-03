@@ -101,13 +101,25 @@ create_cmd() {
 
 # Edit an existing note. For finding the note to edit, the function will
 # change into home directory and call fzf. The note will be opened in
-# editor of choice, defined via $EDITOR environment variable.
+# editor of choice, defined via $EDITOR environment variable. If a
+# parameter is defined it's treated as pattern and the file list will be
+# filtered by find command.
 edit_cmd() { 
+    local pattern="$1"
+
     # Change into home directory
     cd "$zettel_dir"
 
-    # Run fzf to get filename
-    file="$(fzf)" 
+    file=""
+    # Check for pattern parameter
+    if [[ -z "$pattern" ]]; then
+        # Run plain fzf to get filename
+        file="$(fzf)"
+    else
+        # Run find command and remove directories from path before pipe
+        # it to fzf
+        file="$(zettel find "$pattern" | sed -e 's/.*\///' | fzf)"
+    fi
     
     # Call editor with file selected via fzf
     if [[ ! -z "$file" ]]; then
@@ -122,29 +134,28 @@ edit_cmd() {
 }
 
 # The find function searches within file contents and file names. The
-# search powered by ripgrep piped to fzf. The corresponding file will be
-# opened in editor.
+# search powered by ripgrep piped to fzf. The search will output all
+# filenames where the pattern was found.
 find_cmd() { 
-    # Change into home directory
-    cd "$zettel_dir"
+    local pattern="$1"
 
-    # Run rg and fzf to get filename
-    file="$(rg --line-number --column . | fzf)" 
-    
-    # Call editor with file selected
-    if [[ ! -z "$file" ]]; then
-        ${EDITOR} "$file" 
-    fi 
+    # Check for pattern parameter
+    if [[ -z "$pattern" ]]; then
+        echo "No pattern specified."
+        exit 1
+    fi
+
+    rg --files-with-matches "$pattern" "$zettel_dir"
 }
 
 # Via search function a file content search via ripgrep is done on all
 # notes in specified note home directory.
 # Usage: search_cmd $pattern
 search_cmd() {
-    local pattern=$1
+    local pattern="$1"
 
     # Check for pattern parameter
-    if [[ -z $pattern ]]; then
+    if [[ -z "$pattern" ]]; then
         echo "No pattern specified."
         exit 1
     fi
@@ -217,11 +228,11 @@ if [[ ${COMMAND} == "create" ]]; then
     exit 0
 elif [[ ${COMMAND} == "edit" ]]; then
     # Call edit function
-    edit_cmd
+    edit_cmd "$2"
     exit 0
 elif [[ ${COMMAND} == "find" ]]; then
-    # Call find function
-    find_cmd
+    # Call find function with search pattern as argument
+    find_cmd "$2"
     exit 0
 elif [[ ${COMMAND} == "search" ]]; then
     # Call search function with search pattern as argument
