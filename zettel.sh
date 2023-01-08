@@ -31,13 +31,13 @@ ask_user() {
     fi
 }
 
-# Creating a new note. Use current timestamp as prefix and markdown
-# extension '.md' as extension. The note title will be inserted to the
-# newly created file as markdown heading 1 '# Title'. Template selection
-# is supported if $ZETTEL_TEMPLATE_DIR environment variable is set to a
-# directory, containing template plain text files. Template content will
-# be inserted after the title of created note. File will be opened in
-# your editor of choice, defined via $EDITOR environment variable.
+# Creating a new note. Use current timestamp as front matter and markdown
+# extension '.md' as extension. The note title will be inserted to the newly
+# created file as markdown heading 1 '# Title'. Template selection is supported
+# if $ZETTEL_TEMPLATE_DIR environment variable is set to a directory, containing
+# template plain text files. Template content will be inserted after the title
+# of created note. File will be opened in your editor of choice, defined via
+# $EDITOR environment variable.
 create_cmd() {
     # Create new timestamp for note
     local timestamp=$(date +"%Y-%m-%d-%H%M")
@@ -46,7 +46,7 @@ create_cmd() {
     read -p "Note title: " -r title
 
     # Create filename
-    local filename="$timestamp $title.md" 
+    local filename="$title.md" 
 
     template_file=""
     # Check for set template directory
@@ -80,8 +80,9 @@ create_cmd() {
         exit 1
     fi
   
-    # Write title to document
-    echo "# $title" > "$filepath" 
+    # Write front matter and title to document
+    echo -e "---\nid: $timestamp\n---" > "$filepath"
+    echo "# $title" >> "$filepath" 
 
     # Check for selected template file
     if [[ ! -z "${template_file}" ]]; then
