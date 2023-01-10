@@ -92,11 +92,16 @@ create_cmd() {
     # Open file in editor
     ${EDITOR} "$filepath" 
 
-    # Do git add/commit after edit
-    if ask_user "Run git add/commit?"; then
-        cd "$zettel_dir"
-        git add "$filename" 
-        git commit -m "Add note"
+    # Check for changes
+    cd "$zettel_dir"
+    if [[ $(git status --porcelain) ]]; then
+        # Do git add/commit after edit
+        if ask_user "Run git add/commit?"; then
+            git add "$filename" 
+            git commit -m "Add note"
+        fi
+    else
+        echo "No changes."
     fi
 }
 
@@ -126,10 +131,15 @@ edit_cmd() {
     if [[ ! -z "$file" ]]; then
         ${EDITOR} "$file" 
 
-        # Do git add/commit after edit
-        if ask_user "Run git add/commit?"; then
-            git add -p
-            git commit -m "Edit note"
+        # Check for changes
+        if [[ $(git status --porcelain) ]]; then
+            # Do git add/commit after edit
+            if ask_user "Run git add/commit?"; then
+                git add -p
+                git commit -m "Edit note"
+            fi
+        else
+            echo "No changes."
         fi
     fi 
 }
